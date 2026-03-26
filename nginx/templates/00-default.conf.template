@@ -1,0 +1,24 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 444;
+    }
+}
+
+server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
+
+    ssl_certificate /etc/letsencrypt/live/${CHATBOT_INTEGRACAR_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${CHATBOT_INTEGRACAR_DOMAIN}/privkey.pem;
+
+    return 444;
+}
