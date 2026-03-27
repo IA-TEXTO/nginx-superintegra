@@ -16,6 +16,7 @@ services:
       - FILES_DOMAIN=${FILES_DOMAIN}
     networks:
       - proxy
+    restart: unless-stopped
 
 # Networks should be external if the django apps are managed separately
 networks:
