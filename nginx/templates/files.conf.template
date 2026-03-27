@@ -12,6 +12,9 @@ server {
     ssl_certificate /etc/nginx/certs/origin.crt;
     ssl_certificate_key /etc/nginx/certs/origin.key;
 
+    auth_basic "Área Restrita";
+    auth_basic_user_file /etc/nginx/auth/files.htpasswd;
+
     location / {
         root /var/www/documentosCar;
         autoindex on;

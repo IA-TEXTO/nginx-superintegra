@@ -1,3 +1,5 @@
 .env
 nginx/certs/*
 !nginx/certs/.gitkeep
+nginx/auth/*.htpasswd
+!nginx/auth/.gitkeep

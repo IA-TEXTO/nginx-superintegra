@@ -9,6 +9,7 @@ services:
       - ./nginx/templates:/etc/nginx/templates:ro
       - ./nginx/django_proxy.conf:/etc/nginx/conf.d/django_proxy.conf:ro
       - ./nginx/certs:/etc/nginx/certs:ro
+      - ./nginx/auth:/etc/nginx/auth
       - ${PDFS_HOST_PATH}:/var/www/documentosCar:ro
     environment:
       - CHATBOT_INTEGRACAR_DOMAIN=${CHATBOT_INTEGRACAR_DOMAIN}
