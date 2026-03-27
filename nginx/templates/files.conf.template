@@ -1,9 +1,19 @@
 server {
     listen 80;
-    server_name ${FILES_DOMAIN};
-
-    location / {
-        root /var/www/documentosCar;
-        autoindex on;
+    server_name $ {
+        FILES_DOMAI
     }
+    ;
+
+    return 301 https://$host$request_uri;
 }
+
+server {
+    listen 443 ssl;
+    server_name $ {
+        FILES_DOMAI
+    }
+    ;
+
+    ssl_certificate /etc/nginx/certs/origin.crt;
+    ssl_certificate_key /etc/nginx/certs/origin.key;

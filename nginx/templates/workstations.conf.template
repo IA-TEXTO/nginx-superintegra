@@ -1,12 +1,23 @@
 server {
     listen 80;
-    server_name ${WORKSTATIONS_COLATINA_DOMAIN};
+    server_name $ {
+        WORKSTATIONS_COLATINA_DOMAI
+    }
+    ;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name $ {
+        WORKSTATIONS_COLATINA_DOMAI
+    }
+    ;
+
+    ssl_certificate /etc/nginx/certs/origin.crt;
+    ssl_certificate_key /etc/nginx/certs/origin.key;
 
     resolver 127.0.0.11 valid=30s;
 
     location / {
-        set $upstream ${WORKSTATIONS_COLATINA_UPSTREAM};
-        proxy_pass http://$upstream;
-        include /etc/nginx/conf.d/django_proxy.conf;
-    }
-}
