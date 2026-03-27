@@ -1,0 +1,12 @@
+server {
+    listen 80;
+    server_name ${WORKSTATIONS_COLATINA_DOMAIN};
+
+    resolver 127.0.0.11 valid=30s;
+
+    location / {
+        set $upstream ${WORKSTATIONS_COLATINA_UPSTREAM};
+        proxy_pass http://$upstream;
+        include /etc/nginx/conf.d/django_proxy.conf;
+    }
+}

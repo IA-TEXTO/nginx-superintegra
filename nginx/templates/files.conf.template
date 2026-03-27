@@ -1,0 +1,9 @@
+server {
+    listen 80;
+    server_name ${FILES_DOMAIN};
+
+    location / {
+        root /var/www/documentosCar;
+        autoindex on;
+    }
+}

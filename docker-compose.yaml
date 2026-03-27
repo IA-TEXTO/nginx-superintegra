@@ -1,53 +1,23 @@
 services:
   nginx:
     image: nginx:1.27-alpine
-    container_name: reverse-proxy
-    restart: unless-stopped
-    env_file:
-      - .env
+    container_name: nginx_proxy
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - letsencrypt:/etc/letsencrypt
-      - certbot-www:/var/www/certbot
-      - ${PDFS_HOST_PATH}:/srv/pdfs/documentosCar:ro
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/snippets:/etc/nginx/snippets:ro
       - ./nginx/templates:/etc/nginx/templates:ro
-      - ./nginx/docker-entrypoint.d:/docker-entrypoint.d:ro
-      - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
-      - ./logs:/var/log/nginx
+      - ./nginx/django_proxy.conf:/etc/nginx/conf.d/django_proxy.conf:ro
+      - ${PDFS_HOST_PATH}:/var/www/documentosCar:ro
+    environment:
+      - CHATBOT_INTEGRACAR_DOMAIN=${CHATBOT_INTEGRACAR_DOMAIN}
+      - CHATBOT_INTEGRACAR_UPSTREAM=${CHATBOT_INTEGRACAR_UPSTREAM}
+      - WORKSTATIONS_COLATINA_DOMAIN=${WORKSTATIONS_COLATINA_DOMAIN}
+      - WORKSTATIONS_COLATINA_UPSTREAM=${WORKSTATIONS_COLATINA_UPSTREAM}
+      - FILES_DOMAIN=${FILES_DOMAIN}
     networks:
       - proxy
 
-  certbot:
-    image: certbot/certbot:latest
-    container_name: certbot
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - letsencrypt:/etc/letsencrypt
-      - certbot-www:/var/www/certbot
-    entrypoint: /bin/sh
-    command:
-      - -c
-      - |
-        trap exit TERM
-        while :; do
-          certbot renew --webroot -w /var/www/certbot --quiet
-          touch /var/www/certbot/.reload-nginx
-          sleep 12h
-        done
-    networks:
-      - proxy
-
-volumes:
-  letsencrypt:
-  certbot-www:
-
+# Networks should be external if the django apps are managed separately
 networks:
   proxy:
-    name: proxy
     external: true
