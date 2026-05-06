@@ -23,4 +23,5 @@ create_cert() {
 
 create_cert "${CHATBOT_INTEGRACAR_DOMAIN:-}"
 create_cert "${WORKSTATIONS_COLATINA_DOMAIN:-}"
+create_cert "${PRESENCAS_PEC_DOMAIN:-}"
 create_cert "${FILES_DOMAIN:-}"

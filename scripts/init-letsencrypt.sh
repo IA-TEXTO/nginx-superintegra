@@ -30,6 +30,15 @@ docker compose run --rm certbot certonly \
   --no-eff-email \
   -d "${WORKSTATIONS_COLATINA_DOMAIN}"
 
+echo "Emitindo certificado para ${PRESENCAS_PEC_DOMAIN}..."
+docker compose run --rm certbot certonly \
+  --webroot \
+  -w /var/www/certbot \
+  --email "${LETSENCRYPT_EMAIL}" \
+  --agree-tos \
+  --no-eff-email \
+  -d "${PRESENCAS_PEC_DOMAIN}"
+
 echo "Emitindo certificado para ${FILES_DOMAIN}..."
 docker compose run --rm certbot certonly \
   --webroot \
