@@ -1,13 +1,13 @@
 server {
     listen 80;
-    server_name ${BERTCAR_DOMAIN};
+    server_name ${BERTCAR_FRONTEND_DOMAIN};
 
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name ${BERTCAR_DOMAIN};
+    server_name ${BERTCAR_FRONTEND_DOMAIN};
 
     ssl_certificate /etc/nginx/certs/origin.crt;
     ssl_certificate_key /etc/nginx/certs/origin.key;
@@ -15,7 +15,7 @@ server {
     resolver 127.0.0.11 valid=30s;
 
     location / {
-        set $upstream ${BERTCAR_UPSTREAM};
+        set $upstream ${BERTCAR_FRONTEND_UPSTREAM};
         proxy_pass http://$upstream;
         include /etc/nginx/conf.d/django_proxy.conf;
     }

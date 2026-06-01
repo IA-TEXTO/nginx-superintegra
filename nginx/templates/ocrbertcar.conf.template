@@ -1,13 +1,13 @@
 server {
     listen 80;
-    server_name ${BERTCAR_BACKEND_DOMAIN};
+    server_name ${BERTCAR_BACKEND_OCR_DOMAIN};
 
     return 301 https://$host$request_uri;
 }
 
 server {
     listen 443 ssl;
-    server_name ${BERTCAR_BACKEND_DOMAIN};
+    server_name ${BERTCAR_BACKEND_OCR_DOMAIN};
 
     ssl_certificate /etc/nginx/certs/origin.crt;
     ssl_certificate_key /etc/nginx/certs/origin.key;
@@ -17,7 +17,7 @@ server {
     location / {
         client_max_body_size 200M;
 
-        set $upstream ${BERTCAR_BACKEND_UPSTREAM};
+        set $upstream ${BERTCAR_BACKEND_OCR_UPSTREAM};
         proxy_pass http://$upstream;
 
         proxy_set_header Host $host;
