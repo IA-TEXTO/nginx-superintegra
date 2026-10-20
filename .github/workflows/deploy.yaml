@@ -6,35 +6,33 @@ on:
       - main
   workflow_dispatch:
 
+permissions: {}
+
 concurrency:
   group: deploy-prod
   cancel-in-progress: false
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout (metadata only)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Add SSH known host
-        run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          DEPLOY_SHA: ${{ github.sha }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
+          fingerprint: ${{ secrets.SSH_FINGERPRINT }}
+          envs: DEPLOY_SHA
           script: |
-            set -e
-            cd nginx-superintegra
-            git fetch origin
-            git reset --hard origin/main
-            sudo docker compose down
-            sudo docker compose up --build -d --remove-orphans
+            set -eu
+            cd "$HOME/nginx-superintegra"
+            git fetch origin main
+            git reset --hard "$DEPLOY_SHA"
+            sudo -n docker compose config --quiet
+            sudo -n docker compose run --rm nginx nginx -t
+            sudo -n docker compose up -d --force-recreate nginx
